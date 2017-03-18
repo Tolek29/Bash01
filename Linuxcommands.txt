@@ -1,0 +1,342 @@
+﻿#################
+#Processes
+ps - list processes associated with a current terminal
+ps x - list processes not only associated with a current terminal
+ps aux - list all processes belonging to every user
+top - get refreshing processes snapshot
+
+
+Xlogo & run - run xlogo in a bachround
+Jobs - list jobs started by a current terminal
+Bg %n - move process to bacground
+Fg %n - move process to foreground
+
+
+Kill - send signal to process
+Kill 28401 - send TERM signal to a program to terminate
+Kill -KILL 28401 - send KILL signal to a kernell to terminate program
+
+Ctrl-c  - terminate 
+Ctrl-z - stop
+
+
+#################
+#Environments
+printenv - print all environment
+/etc/bash.bashrc - configuration script applies to all users
+~/.bashrc user’s personal startup file, used to extend settings in a global configuiration script
+alias - set alias for files
+
+
+#################
+#Vi
+:q exit
+:q! exit without saving
+vi foo.txt - create new file
+i - enter insert mode
+:w save
+:wq - save and exit
+o - add line bellow the current line
+O - add line above the current line
+dd - delete the current line
+yy - copy the current line
+/ - search
+v - select block of text (V - whole lines)
+y - copy marked text
+p - paste after cursor
+P - paste before cursor
+> - tab marked text
+
+
+#################
+#Package management
+apt-cache search search_string - check whether package is installed
+apt-get install package_name
+dpkg --install package_file - install from file
+apt-get remove package_name - remove package
+apt-get update; apt-get upgrade - update package version
+dpkg --list - list installed package
+apt-cache show op
+
+
+#################
+#Networking
+ping - send icmp echo_request to netwoek hosts
+traceroute - print route packets trace to a network hosts
+ip - show/manipulate, devices, policy routing and tunnels
+netstat - print networks connections, routing tables, interface statisitc
+netstat -ie - display all interfaces with additional information
+wget - network downloader
+shh - open ssh client
+ssh hostname - connect to a host
+
+
+#################
+#Searching for files
+locate - find file by names
+find ~ - list home directory
+find ~ -type d - find directory in a home directory
+sudo find ~ -type f -name "*.jpg" -size -50M - find jpg files with size less than 50M in a home directory
+sudo find ~ -type f -name "*.jpg" -ls - show permissions
+sudo find ~ -type f -name "*.jpg" -exec ls -l '{}' ';' - run command on a results
+sudo find ~ -type f -name "*.jpg" -ok ls -l '{}' ';' - run command with a prompt
+sudo find ~ -type f -name "*.jpg" -exec ls -l '{}' + - run command with a list of arguments
+sudo find ~ -type f -name "*.jpg" -exec ls -l '{}' + - run command with a list of arguments
+sudo find ~ -type f -name "*.jpg" | xargs ls -l - run command with a list of arguments
+
+
+#################
+#Archiving and backup
+gzip - compress one or more file
+gzip -tv foo.txt.gz - check integrity 
+tar - archive 
+tar cf playground.tar playground - create archive called playground.tar of plaground directory
+tar xf ../playground.tar - extract content of playground.tar into current directory
+find playground -name 'file-A' -exec tar rf playground.file-A.tar '{}' '+' - find files/directories matching ‘file-A’ pattern and make archive 
+
+
+rsync - synchronize folders
+rsync -av 
+rsync -av playground foo - synchornize playground directory with foo directory with preservation of file attributes
+
+
+#################
+#Text Processing
+cat -A foo.txt - show content with all characters
+cat -s - show content with numbered lines
+
+
+sort - sort lines
+sort -nr - numeric sorting in reverse order
+ls -l /usr/bin | sort -nr -k 5 | head - sort result of ls command by 5th field and show first 10 lines(head)
+sort --key=2n distros.txt - sort lines by second field numeric
+sort -t ':' -k 7 /etc/passwd - sort by 7 field separated by “:”
+
+
+uniq - show unique lines from sorted standard 
+sort foo.txt | uniq - sort and show unique
+
+
+cut
+cut -f 3 distros.txt - show third field
+cut -f 3 distros.txt | cut -c 7-10 - show third field
+
+
+paste -  opossite cut
+
+
+diff file1.txt file2.txt - dompare two files
+diff -c file1.txt file2.txt - dompare two files using context format
+diff -u file1.txt file2.txt - dompare two files using unifed format
+
+
+sed
+echo "front" | sed '1s/front/back/' - replace front with back
+sed -n '1,5p' distros.txt - print fields from 1 to 5
+sed -n '/SUSE/p' distros.txt - print all lines containing SUSE
+sed -n '/SUSE/p' distros.txt - print all lines not containing SUSE
+sed 's/\([0-9]\{2\}\)\/\([0-9]\{2\}\)\/\([0-9]\{4\}\)$/\3-\1-\2/' distros.txt - replace 03/20/2006 with 2006/20/03
+
+
+#################
+#Shell scripts
+
+function name () {
+        commands
+return
+}
+
+
+if commands; then
+        commands
+[elif commands; then
+        commands…]
+[else 
+commands]
+fi
+
+
+echo $? - show last command exit status
+
+
+File expressions
+[ expression ]
+file1 -ef file2 - two file names refere to the same file by hard linking
+file1 -nt file2 - file1 is newer than file2
+-e file - file exists
+-d file - file exists and is directory
+-f file - file exists and is regular file
+
+
+String expression
+string - string is not null
+-n string - length of string is greather than zero
+-z string - length of string is zero
+string1 = string2 - 
+string1 == string2 - string1 is equal string2
+string1 != string2 - strign1 and string2 are not equal
+
+
+Integer expressions
+integer1 -eq integer2 - integer1 is equal to integer2
+integer1 -ne integer2 - integer1 is not equal to integer2
+integer1 -le integer2 - integer1 is less than or equal integer2
+integer1 -lt integer2 - integer1 is less than integer2
+integer1 -ge integer2 -  integer1 is grather than integer2 or equal
+integer1 -gt integer2 - integer1 is grather than integer2 
+
+
+Modern expression
+[[ expression ]]
+string1 =~ regex
+(()) - compound command for integers (allow using ==, < >)
+
+
+Combining expressions
+                test []                 [[ ]] and (())
+AND                -a                &&
+OR                -o                ||
+NOT                !                !
+
+
+Control Operators
+command1 && command2
+command1 || command2
+
+
+mkdir temp && cd temp - create directory and if succeeds change current working directory to temp
+
+
+#################
+#Reading keyboard input
+read - read input from keyboard
+-d - first character in the string is used to indicate end of input
+-p - display a promt for input using the string promt.
+-s - silent mode, do not echo input
+-t - timeout 
+read cannot be pipelined
+
+
+#################
+#Flow control
+while commands; do
+commands
+done
+
+
+#!/bin/bash
+
+
+
+
+while read firstname secondname age; do
+    echo "$firstname $secondname $age"
+done < data.txt
+
+
+for variable in words; do
+commands
+done        
+
+
+for (( expression1; expression2; expression3 )); do
+        commands
+done
+
+
+#!/bin/bash -x - enable tracing
+
+
+#################
+#Case
+case word in
+        [pattern]) commands ;;
+esac
+
+
+#################
+#Positional parameters
+$0, $1, $2, $3…
+$# - number of arguments'
+shift - move all arguments back one place(position--)
+
+
+$@ - ezxpand into the list of positional parameters, starting with 1, when surrounded by double quotes it expadns each positional paramter into a separate word surrounded by double quotes
+
+
+#################
+#String and numbers
+a=”foo”
+echo “${a}_file” - concatenate variable $a with ‘_file’
+echo ${foo1:-"ssss"} - if paramter is unset or is empty expansion results in the value of word
+echo ${foo1:="ssss"} - if paramter is unset or is empty expansion results in the value of word and assign new value to the paramter
+
+
+echo ${foo1:?word} - if paramter is unset or is empty expansion causes the script to exit with error and contents of word is sent to standard error.
+echo ${#foo} -  print $foo length
+echo ${paramteter:offset} - substring from offset
+echo ${paramteter:offset:length} - substring from offset with a given length
+${parameter#pattern} - removes  a leading portion of the string contained in parameter defined by a pattern(removes shortest match)
+${parameter#pattern} - removes  a leading portion of the string contained in parameter defined by a pattern(removes longgest match)
+
+
+${parameter/pattern/string} - replace first occurence of pattern (wildcard pattern)
+${parameter//pattern/string} - replace all occurence of pattern (wildcard pattern)
+${parameter/#pattern/string} - replace all occurence of pattern (wildcard pattern), /# require that the match occur at the beginning of the string
+${parameter/%pattern/string} - replace all occurence of pattern (wildcard pattern), /# require that the match occur at the end of the string
+
+
+#################
+#Arithmetic Evaluation and Expression
+$((expression))
+0number - in arithemtic expression considered as octal
+0xnumber - in arithemtic expression considered as hexadecimal
+base#number - in arithemtic expression considered as number in base
+
+
+#################
+#Arrays
+declaring:
+a[1]=foo
+declare -a a
+assigning values
+name[subscript]=value
+name=(value1, value2)
+name=(value1, value2)
+days=([0]=Sun [1]=Mon [2]=Tue [3]=Wed [4]=Thu [5]=Fri [6]=Sat)
+
+
+outputting the entire contents of an array
+animals=("a dog" "a cat" "a fish")
+for i in ${animals[@]}; do echo $i;    gives:
+a
+dog
+a
+cat
+a
+fish
+
+
+for i in “${animals[@]};” do echo $i;    gives:
+a dog
+a cat
+a fish
+
+
+${#a[@]} - number of array elements
+${#a[100]} - length of element 100
+
+
+adding elements to the end of an array:
+foo=(a b c)
+foo+=(d e f)
+
+
+sorting:
+a_sorted=$(for i in ${a[@]}; do echo $i; done | sort)
+
+
+deleting arrays and element of an array
+foo=(a b c d e f)
+unset ‘foo[2]’
+unset foo
